@@ -3,6 +3,16 @@ entries:
   backup:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2024-08-16T17:14:49.535955569Z"
+    description: A Helm chart for Kubernetes
+    digest: 3d39a8f3069b17ba54d876125dcc592ab1b15912df253fbaf7969687099430d9
+    name: backup
+    type: application
+    urls:
+    - https://github.com/MichaelSp/k8s-rsync-chart/releases/download/backup-0.1.7/backup-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2024-08-16T17:10:54.130636681Z"
     description: A Helm chart for Kubernetes
     digest: 17753ca33d1e2c5c0820fc37288925e356cf90043327833d4bc059e29062afee
@@ -71,4 +81,4 @@ entries:
     urls:
     - https://github.com/MichaelSp/k8s-rsync-chart/releases/download/backup-0.1.0/backup-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-16T17:10:54.130663961Z"
+generated: "2024-08-16T17:14:49.536005362Z"
