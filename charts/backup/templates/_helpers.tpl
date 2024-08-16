@@ -44,9 +44,6 @@ Common labels for proxy
 {{- define "backup.labels.proxy" -}}
 helm.sh/chart: {{ include "backup.chart" . }}
 {{ include "backup.selectorLabels.proxy" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -56,6 +53,7 @@ Selector labels for proxy
 {{- define "backup.selectorLabels.proxy" -}}
 app.kubernetes.io/name: {{ include "backup.name" . }}-proxy
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: proxy
 {{- end }}
 
 
@@ -66,9 +64,6 @@ Common labels for sender
 {{- define "backup.labels.sender" -}}
 helm.sh/chart: {{ include "backup.chart" . }}
 {{ include "backup.selectorLabels.sender" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -78,5 +73,6 @@ Selector labels
 {{- define "backup.selectorLabels.sender" -}}
 app.kubernetes.io/name: {{ include "backup.name" . }}-sender
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: sender
 {{- end }}
 
