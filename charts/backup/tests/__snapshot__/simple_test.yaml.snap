@@ -67,20 +67,20 @@ Matches the snapshot:
                       memory: 100Mi
                   volumeMounts:
                     - mountPath: /src/var/srcA
-                      name: src--var-srcA
+                      name: src--var-srca
                     - mountPath: /src/var/srcB
-                      name: src--var-srcB
+                      name: src--var-srcb
                     - mountPath: /root/ssh
                       name: ssh-key
               hostname: rsync-sender
               restartPolicy: OnFailure
               volumes:
-                - name: src--var-srcA
+                - name: src--var-srca
                   persistentVolumeClaim:
-                    claimName: release-name-backup--var-srcA
-                - name: src--var-srcB
+                    claimName: release-name-backup--var-srca
+                - name: src--var-srcb
                   persistentVolumeClaim:
-                    claimName: release-name-backup--var-srcB
+                    claimName: release-name-backup--var-srcb
                 - name: ssh-key
                   secret:
                     defaultMode: 384
@@ -140,7 +140,7 @@ Matches the snapshot:
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: release-name-backup--var-srcA
+      name: release-name-backup--var-srca
       namespace: backup
     spec:
       accessModes:
@@ -149,12 +149,12 @@ Matches the snapshot:
         requests:
           storage: 100Gi
       storageClassName: local-storage
-      volumeName: release-name-backup--var-srcA
+      volumeName: release-name-backup--var-srca
   6: |
     apiVersion: v1
     kind: PersistentVolume
     metadata:
-      name: release-name-backup--var-srcA
+      name: release-name-backup--var-srca
       namespace: backup
     spec:
       accessModes:
@@ -178,7 +178,7 @@ Matches the snapshot:
     apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
-      name: release-name-backup--var-srcB
+      name: release-name-backup--var-srcb
       namespace: backup
     spec:
       accessModes:
@@ -187,12 +187,12 @@ Matches the snapshot:
         requests:
           storage: 100Gi
       storageClassName: local-storage
-      volumeName: release-name-backup--var-srcB
+      volumeName: release-name-backup--var-srcb
   8: |
     apiVersion: v1
     kind: PersistentVolume
     metadata:
-      name: release-name-backup--var-srcB
+      name: release-name-backup--var-srcb
       namespace: backup
     spec:
       accessModes:
