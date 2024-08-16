@@ -26,6 +26,8 @@ rsync:
 
   existingSshSecret: ssh-private-key
 
+  destinationPath: /dst
+
 proxy:
   tolerations:
   - key: location

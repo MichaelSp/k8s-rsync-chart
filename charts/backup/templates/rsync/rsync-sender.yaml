@@ -25,7 +25,7 @@ spec:
             chmod 600 /root/.ssh/id_rsa
             cp /root/ssh/known_hosts /root/.ssh/known_hosts
             {{ range $src := .Values.source.hostPaths -}}
-            rsync -avz {{ $.Values.rsync.options }} /src{{ $src }} -e  "ssh -p 2222" sshd@{{ include "backup.fullname" $ }}-proxy:/home/root/Volume_1/k8s{{ $src }}
+            rsync -avz {{ $.Values.rsync.options }} /src{{ $src }} -  "ssh -p 2222" sshd@{{ include "backup.fullname" $ }}-proxy:{{ $.Values.rsync.destinationPath }}{{ $src }}
             {{ end }}
           volumeMounts:
           {{- range .Values.source.hostPaths }}

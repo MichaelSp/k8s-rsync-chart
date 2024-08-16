@@ -32,10 +32,10 @@ Matches the snapshot:
     kind: CronJob
     metadata:
       labels:
+        app.kubernetes.io/component: sender
         app.kubernetes.io/instance: release-name
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: backup-sender
-        app.kubernetes.io/version: 1.2.3
         helm.sh/chart: backup-0.1.0
       name: release-name-backup-sender
       namespace: backup
@@ -52,8 +52,8 @@ Matches the snapshot:
                       cp /root/ssh/backup-ssh-key /root/.ssh/id_rsa
                       chmod 600 /root/.ssh/id_rsa
                       cp /root/ssh/known_hosts /root/.ssh/known_hosts
-                      rsync -avz --delete /src/var/srcA -e  "ssh -p 2222" sshd@release-name-backup-proxy:/home/root/Volume_1/k8s/var/srcA
-                      rsync -avz --delete /src/var/srcB -e  "ssh -p 2222" sshd@release-name-backup-proxy:/home/root/Volume_1/k8s/var/srcB
+                      rsync -avz --delete /src/var/srcA -  "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcA
+                      rsync -avz --delete /src/var/srcB -  "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcB
                   command:
                     - /bin/sh
                     - -c
@@ -91,28 +91,28 @@ Matches the snapshot:
     kind: Deployment
     metadata:
       labels:
+        app.kubernetes.io/component: proxy
         app.kubernetes.io/instance: release-name
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: backup-proxy
-        app.kubernetes.io/version: 1.2.3
         helm.sh/chart: backup-0.1.0
       name: release-name-backup-proxy
       namespace: backup
     spec:
       selector:
         matchLabels:
+          app.kubernetes.io/component: proxy
           app.kubernetes.io/instance: release-name
           app.kubernetes.io/managed-by: Helm
           app.kubernetes.io/name: backup-proxy
-          app.kubernetes.io/version: 1.2.3
           helm.sh/chart: backup-0.1.0
       template:
         metadata:
           labels:
+            app.kubernetes.io/component: proxy
             app.kubernetes.io/instance: release-name
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: backup-proxy
-            app.kubernetes.io/version: 1.2.3
             helm.sh/chart: backup-0.1.0
         spec:
           containers:
@@ -224,9 +224,9 @@ Matches the snapshot:
           protocol: TCP
           targetPort: 2222
       selector:
+        app.kubernetes.io/component: proxy
         app.kubernetes.io/instance: release-name
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: backup-proxy
-        app.kubernetes.io/version: 1.2.3
         helm.sh/chart: backup-0.1.0
         matchLabels: null
