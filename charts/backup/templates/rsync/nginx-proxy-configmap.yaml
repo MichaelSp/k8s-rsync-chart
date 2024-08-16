@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "backup.fullname" . }}-proxy-config
+  namespace: {{ include "backup.namespace" . }}
+data:
+  nginx.conf: |
+    events {
+        worker_connections 1024;
+    }
+    stream {
+        server {
+            listen 2222;
+            proxy_pass {{ .Values.rsync.host }}:22;
+        }
+    }
+    
+    http {
+        server {
+            listen 80;
+            location /healthz {
+                return 200 "OK";
+            }
+        }
+    }

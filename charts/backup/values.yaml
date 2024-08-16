@@ -1,0 +1,34 @@
+# schedule every hour 13 minutes past the hour
+schedule: "13 * * * *"
+
+# Source path on the host to backup
+source:
+  hostPaths:
+  - /var/srcA
+  - /var/srcB
+  
+  storageClassName: local-storage
+
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - sp
+
+rsync:
+  host: destination.example.com
+
+  # additional rsync options: 
+  options: --delete # delete files on destination that are not on source
+
+proxy:
+  tolerations:
+  - key: location
+    operator: Equal
+    value: home
+    effect: NoExecute
+  nodeSelector:
+    location: home

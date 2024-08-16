@@ -1,0 +1,34 @@
+{{- range $src := .Values.source.hostPaths }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "backup.fullname" $ }}-{{ $src | replace "/" "-" }}
+  namespace: {{ include "backup.namespace" $ }}
+spec:
+  accessModes:
+  - ReadOnlyMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-storage
+  volumeName: {{ include "backup.fullname" $ }}-{{ $src | replace "/" "-" }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "backup.fullname" $ }}-{{ $src | replace "/" "-" }}
+  namespace: {{ include "backup.namespace" $ }}
+spec:
+  capacity:
+    storage: 100Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ $.Values.source.storageClassName }}
+  local:
+    path: {{ $src }}
+  nodeAffinity:
+    {{ $.Values.source.nodeAffinity | toYaml | nindent 4 }}
+---
+{{- end }}

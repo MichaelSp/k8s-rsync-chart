@@ -1,0 +1,11 @@
+suite: Simple Test Suite
+chart:
+  version: 0.1.0
+  appVersion: 1.2.3
+release:
+  name: release-name
+  namespace: backup
+tests:
+- it: Matches the snapshot
+  asserts:
+  - matchSnapshot: {}

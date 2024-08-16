@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "backup.fullname" . }}-proxy
+  namespace: {{ include "backup.namespace" . }}
+  labels:
+    {{- include "backup.labels.proxy" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "backup.labels.proxy" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "backup.labels.proxy" . | nindent 8 }}  
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 2222
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: {{ include "backup.fullname" . }}-proxy-config
+      tolerations: {{ toYaml .Values.proxy.tolerations | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.proxy.nodeSelector | nindent 8 }}

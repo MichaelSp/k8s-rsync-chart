@@ -1,0 +1,53 @@
+# pod that sends data to the rsync receiver
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "backup.fullname" . }}-sender
+  namespace: {{ include "backup.namespace" . }}
+  labels:
+    {{- include "backup.labels.sender" . | nindent 4 }}
+spec:
+  schedule: "{{ .Values.schedule }}"
+  jobTemplate:
+   spec:
+    template:
+      spec:
+        hostname: rsync-sender
+        containers:
+        - name: rsync
+          image: alpine:3.20
+          command: ["/bin/sh", "-c"]
+          args:
+          - |
+            apk add --no-cache rsync openssh-client
+            mkdir -p /root/.ssh
+            cp /root/ssh/backup-ssh-key /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/id_rsa
+            cp /root/ssh/known_hosts /root/.ssh/known_hosts
+            {{ range $src := .Values.source.hostPaths -}}
+            rsync -avz {{ $.Values.rsync.options }} /src{{ $src }} -e  "ssh -p 2222" sshd@{{ include "backup.fullname" $ }}-proxy:/home/root/Volume_1/k8s{{ $src }}
+            {{ end }}
+          volumeMounts:
+          {{- range .Values.source.hostPaths }}
+          - name: src-{{ . | replace "/" "-" }}
+            mountPath: /src{{ . }}
+          {{- end }}
+          - name: ssh-key
+            mountPath: /root/ssh
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              memory: 200Mi
+        restartPolicy: OnFailure
+        volumes:
+        {{- range .Values.source.hostPaths }}
+        - name: src-{{ . | replace "/" "-" }}
+          persistentVolumeClaim:
+            claimName: {{ include "backup.fullname" $ }}-{{ . | replace "/" "-" }}
+        {{- end }}
+        - name: ssh-key
+          secret:
+            secretName: ssh-private-key
+            defaultMode: 0600
