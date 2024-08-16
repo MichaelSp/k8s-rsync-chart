@@ -49,5 +49,5 @@ spec:
         {{- end }}
         - name: ssh-key
           secret:
-            secretName: ssh-private-key
+            secretName: {{ .Values.rsync.existingSshSecret }}
             defaultMode: 0600

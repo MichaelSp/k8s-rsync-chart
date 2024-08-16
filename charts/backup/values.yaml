@@ -24,6 +24,8 @@ rsync:
   # additional rsync options: 
   options: --delete # delete files on destination that are not on source
 
+  existingSshSecret: ssh-private-key
+
 proxy:
   tolerations:
   - key: location
