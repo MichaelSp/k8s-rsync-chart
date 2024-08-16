@@ -44,6 +44,9 @@ Common labels for proxy
 {{- define "backup.labels.proxy" -}}
 helm.sh/chart: {{ include "backup.chart" . }}
 {{ include "backup.selectorLabels.proxy" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -64,6 +67,9 @@ Common labels for sender
 {{- define "backup.labels.sender" -}}
 helm.sh/chart: {{ include "backup.chart" . }}
 {{ include "backup.selectorLabels.sender" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -76,3 +82,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: sender
 {{- end }}
 
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "backup.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "backup.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}

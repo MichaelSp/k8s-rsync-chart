@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "backup.fullname" . }}-proxy
-  namespace: {{ include "backup.namespace" . }}
   labels:
     {{- include "backup.labels.proxy" . | nindent 4 }}
 spec:
@@ -11,9 +10,23 @@ spec:
     {{- include "backup.labels.proxy" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.proxy.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        {{- include "backup.labels.proxy" . | nindent 8 }}  
+        {{- include "backup.labels.proxy" . | nindent 8 }}
+        {{- with .Values.proxy.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
+      {{- with .Values.proxy.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "backup.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
       - name: nginx
         image: nginx:alpine
@@ -24,9 +37,15 @@ spec:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
+          resources:
+            {{- toYaml .Values.proxy.resources | nindent 12 }}
       volumes:
       - name: nginx-config
         configMap:
           name: {{ include "backup.fullname" . }}-proxy-config
       tolerations: {{ toYaml .Values.proxy.tolerations | nindent 8 }}
       nodeSelector: {{ toYaml .Values.proxy.nodeSelector | nindent 8 }}
+      {{- with .Values.proxy.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

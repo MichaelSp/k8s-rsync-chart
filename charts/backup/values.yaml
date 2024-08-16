@@ -29,6 +29,10 @@ rsync:
   destinationPath: /dst
 
 proxy:
+  podAnnotations: {}
+  podLabels: {}
+  imagePullSecrets: []
+  affinity: {}
   tolerations:
   - key: location
     operator: Equal
@@ -36,3 +40,8 @@ proxy:
     effect: NoExecute
   nodeSelector:
     location: home
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
