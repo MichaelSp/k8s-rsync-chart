@@ -41,6 +41,7 @@ spec:
             limits:
               memory: 200Mi
         restartPolicy: OnFailure
+        concurrencyPolicy: Forbid  # Add this line to avoid concurrent runs
         volumes:
         {{- range .Values.source.hostPaths }}
         - name: src-{{ . | untitle | lower | replace "/" "-" }}
