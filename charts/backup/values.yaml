@@ -33,6 +33,7 @@ proxy:
   podLabels: {}
   imagePullSecrets: []
   affinity: {}
+  podSecurityContext: {}
   tolerations:
   - key: location
     operator: Equal

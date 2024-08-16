@@ -26,7 +26,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "backup.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.proxy.podSecurityContext | nindent 8 }}
       containers:
       - name: nginx
         image: nginx:alpine
