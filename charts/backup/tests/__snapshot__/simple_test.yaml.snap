@@ -45,6 +45,7 @@ Matches the snapshot:
         spec:
           template:
             spec:
+              concurrencyPolicy: Forbid
               containers:
                 - args:
                     - |
@@ -53,8 +54,8 @@ Matches the snapshot:
                       cp /root/ssh/backup-ssh-key /root/.ssh/id_rsa
                       chmod 600 /root/.ssh/id_rsa
                       cp /root/ssh/known_hosts /root/.ssh/known_hosts
-                      rsync -avz --delete /src/var/srcA -  "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcA
-                      rsync -avz --delete /src/var/srcB -  "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcB
+                      rsync -avz --delete /src/var/srcA -e "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcA
+                      rsync -avz --delete /src/var/srcB -e "ssh -p 2222" sshd@release-name-backup-proxy:/dst/var/srcB
                   command:
                     - /bin/sh
                     - -c
@@ -128,7 +129,7 @@ Matches the snapshot:
                   subPath: nginx.conf
           nodeSelector:
             location: home
-          securityContext: null
+          securityContext: {}
           serviceAccountName: release-name-backup
           tolerations:
             - effect: NoExecute
