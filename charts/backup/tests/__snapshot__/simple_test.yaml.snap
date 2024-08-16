@@ -104,10 +104,7 @@ Matches the snapshot:
         matchLabels:
           app.kubernetes.io/component: proxy
           app.kubernetes.io/instance: release-name
-          app.kubernetes.io/managed-by: Helm
           app.kubernetes.io/name: backup-proxy
-          app.kubernetes.io/version: 1.2.3
-          helm.sh/chart: backup-0.1.0
       template:
         metadata:
           labels:
