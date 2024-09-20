@@ -6,7 +6,7 @@ source:
   hostPaths:
   - /var/srcA
   - /var/srcB
-  
+
   storageClassName: local-storage
 
   nodeAffinity:
@@ -21,8 +21,8 @@ source:
 rsync:
   host: destination.example.com
 
-  # additional rsync options: 
-  options: --delete # delete files on destination that are not on source
+  # additional rsync options:
+  options: --delete                   # delete files on destination that are not on source
 
   existingSshSecret: ssh-private-key
 
